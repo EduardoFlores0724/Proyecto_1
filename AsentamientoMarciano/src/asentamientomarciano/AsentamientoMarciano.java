@@ -71,27 +71,33 @@ public class AsentamientoMarciano {
     int menosEnergia = 0;
     
     int[] valoresEner = new int[dias];
-  
+    double[][]humedadSectorial = new double[fila][colu];
     
     
     for(int i=0; i<dias; i++){
         System.out.printf("Ingresar energia %d\n",i+1);
-        energiaAlmacenada[i] = ValidacionNumeroPositivo(scan);
+        valoresEner[i] = ValidacionNumeroPositivo(scan);
     }//Fin de For
-       energiaTotal = TotalEnergiaSemana(energiaAlmacenada);
+       energiaTotal = TotalEnergiaSemana(valoresEner);
        PromedioEnergiaSemanal = CalculoPromedioEnergia(energiaTotal, dias);
-       menosEnergia = DiaMasBajoEnergia(energiaAlmacenada);
+       menosEnergia = DiaMasBajoEnergia(valoresEner);
        
         System.out.println("--------------------------");
         System.out.println("--      Resultados      --");
         System.out.println("--------------------------");
         System.out.printf("Total Energia: %d\n",energiaTotal);
-        System.out.printf("Promedio: %.2f<'n", PromedioEnergiaSemanal);
-        System.out.printf("Menor Energia Registrada: %d\n", menosEnergia);
+        System.out.printf("Promedio: %.2f\n", PromedioEnergiaSemanal);
+        System.out.printf("Menor Energia Registrada: %d ", menosEnergia+1);
+        System.out.printf("La cantidad de energia para el "
+                + "dia %d es: %d\n",menosEnergia+1,valoresEner[menosEnergia]);
+        
         
         System.out.println("\n--- FASE DOS ---");
         
-        double[][] humedadSectorial = IngresamosMedicionesSensorHumedad(scan,fila, colu);
+        humedadSectorial = IngresamosMedicionesSensorHumedad(scan, fila, colu);
+        mostrarMapaSectorial(humedadSectorial);
+        System.out.println("");
+        SectoresCriticos(humedadSectorial);
         
         
         
@@ -102,7 +108,7 @@ public class AsentamientoMarciano {
           int numeroTemp = 0;
           
           do {
-              System.out.println("Ingresa el dato de la lectura echa");
+              System.out.println("Ingresa el dato de la lectura hecha");
               System.out.print("Lectura:");
               numeroTemp = sc.nextInt();
           
@@ -140,7 +146,7 @@ public class AsentamientoMarciano {
           int energiaTemp = arreglo[0];
           int indice = 0;
           
-          for(int i = 1; i <arreglo.length; i++){
+          for(int i = 1; i >arreglo.length; i++){
               if(energiaTemp<arreglo[i]){
                   energiaTemp = arreglo[i];
                   indice = i;
@@ -154,6 +160,7 @@ public class AsentamientoMarciano {
           System.out.println("Ingresa datos de cada sector");
         for(int i = 0; i < fila; i++){
             for(int j = 0; j < colu; j++){
+                System.out.printf("Sector %d , %d: ",i+1,j+1);
                 arregloTemp[i][j] = sc.nextDouble();
             }
 
@@ -166,7 +173,7 @@ public class AsentamientoMarciano {
           System.out.println("\n--------------------------");
           for (int i =0; i < arreglo.length; i++){
               for (int j = 0; j < arreglo[i].length; j++){
-                  System.out.println("\t"+arreglo[i][j]);
+                  System.out.print(arreglo[i][j]+"\t");
               }
               System.out.println("\n-----------------------");
           }//fin ciclo
